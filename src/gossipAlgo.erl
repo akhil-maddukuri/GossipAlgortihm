@@ -41,7 +41,7 @@ start(Count,Pids,Network)->
   start(Count-1, lists:append([Pids,[Pid]]), Network).
 
 processHandler(10,Pids)->
-  io:fwrite("Converged ~n"),
+  io:fwrite("Node Converged ~n"),
   io:fwrite("Ending Time Stamp : ~p ~n",[get_time()]),
   stopActors(Pids, 1,self()),
   done;
@@ -53,14 +53,17 @@ processHandler(Count,Pids)->
       processHandler(Count+1, Pids);
 
     {line_network,Index}->
+      %io:fwrite("Receoved gossip tp ~p \n",[self()]),
       line_network(Pids,Index),
       processHandler(Count+1, Pids);
 
     {grid_network,Index}->
+      %io:fwrite("Receoved gossip tp ~p \n",[self()]),
       network_2d(Pids,Index),
       processHandler(Count+1, Pids);
 
     {threeD_grid_network,Index}->
+      %io:fwrite("Receoved gossip tp ~p \n",[self()]),
       network_3d(Pids,Index),
       processHandler(Count+1, Pids);
 
@@ -94,16 +97,16 @@ get_random_index(N,Index)->
     true->
       get_random_index(N, Index)
   end.
-full_network(Pids,Index)->
+full_network(Pids,_Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
   N = length(Pids),
-  Random_Index =  get_random_index(N, Index),
-  Pid = lists:nth(Random_Index, Pids),
-  % io:fwrite("Sending gossip from ~p to ~p ~n",[self(),Pid]),
-  Pid ! {full_network,Random_Index},
+  _RIndex =  get_random_index(N, _Index),
+  Pid = lists:nth(_RIndex, Pids),
+  Pid ! {full_network,_RIndex},
   ok.
 
 line_network(Pids,Index)->
+  %io:fwrite("sending gossip from ~p \n",[self()]),
   N = length(Pids),
   if
     Index == 1->
@@ -119,34 +122,33 @@ line_network(Pids,Index)->
   Pid ! {line_network,Random_Index},
   ok.
 
-network_2d(Pids,_Indx)->
+network_2d(Pids,_Index)->
+  %io:fwrite("sending gossip from ~p \n",[self()]),
+
   N = round(math:sqrt(length(Pids))),
-  Indices = [round(_Indx/4), _Indx rem 4],
-  %Indices = get_2d_index(_Indx, 4),
-  I = lists:nth(1, Indices),
-  J = lists:nth(2, Indices),
-  _RNodes = rand_2d_idx(I,J,N),
-  _RIndx  = round(lists:nth(1, _RNodes)*N + lists:nth(2, _RNodes)),
-  %Random_Index = get_1d_index(lists:nth(1, Random_Indices), lists:nth(2, Random_Indices), N)+1,
-  Pid = lists:nth(_RIndx, Pids),
+  Indices = [round(_Index/4), _Index rem 4],
+  _i = lists:nth(1, Indices),
+  _j = lists:nth(2, Indices),
+  _RNodes = rand_2d_idx(_i,_j,N),
+  _RIndex  = round(lists:nth(1, _RNodes)*N + lists:nth(2, _RNodes)),
+  Pid = lists:nth(_RIndex, Pids),
   % io:fwrite("Sending gossip from ~p to ~p ~n",[self(),Pid]),
-  Pid ! {grid_network,_RIndx},
+  Pid ! {grid_network,_RIndex},
   ok.
 
 network_3d(Pids,Index)->
+  %io:fwrite("sending gossip from ~p \n",[self()]),
   N = round(math:sqrt(length(Pids))),
-  % io:fwrite("~p ~n",[N]),
   Indices = [round(Index/4), Index rem 4],
   %Indices = get_2d_index(Index, 4),
   I = lists:nth(1, Indices),
   J = lists:nth(2, Indices),
   Random_Indices = rand_2d_idx(I,J,N),
   _GRidx = round(lists:nth(1, Random_Indices)*N + lists:nth(2, Random_Indices)),
-  %Grid_Random_Index = get_1d_index(lists:nth(1, Random_Indices), lists:nth(2, Random_Indices), N)+1,
+  %io:fwrite("random grid index: ~p",[_GRidx]),
   Random_Index = get_random_index(length(Pids), Index),
   Random_Pid = lists:nth(Random_Index, Pids),
   Pid = lists:nth(_GRidx, Pids),
-  % io:fwrite("Sending gossip from ~p to ~p ~n",[self(),Pid]),
   Pid ! {threeD_grid_network,_GRidx},
   Random_Pid !{threeD_grid_network,Random_Index},
   ok.
