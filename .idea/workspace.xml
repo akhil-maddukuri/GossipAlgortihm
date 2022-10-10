@@ -9,13 +9,8 @@
       <change afterPath="$PROJECT_DIR$/../../.idea/rebar.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gossip.beam" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pushsum.beam" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sum.beam" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sum.erl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gossip.erl" beforeDir="false" afterPath="$PROJECT_DIR$/src/gossip.erl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pushsum.erl" beforeDir="false" afterPath="$PROJECT_DIR$/src/pushsum.erl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sum.erl" beforeDir="false" afterPath="$PROJECT_DIR$/src/sum.erl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +63,7 @@
       <option name="presentableId" value="Default" />
       <updated>1665348526414</updated>
       <workItem from="1665348527827" duration="1254000" />
-      <workItem from="1665350337776" duration="23216000" />
+      <workItem from="1665350337776" duration="23252000" />
     </task>
     <servers />
   </component>

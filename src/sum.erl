@@ -10,7 +10,7 @@
 -author("akhil").
 
 %% API
--export([start/3]).
+-export([start/3,pushsum/4]).
 
 
 start_actors(1,Pids) ->
