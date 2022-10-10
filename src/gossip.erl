@@ -1,6 +1,5 @@
 -module(gossip).
 
-
 -export([process/3,msg_handler/2]).
 
 get_time_stamp()->

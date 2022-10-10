@@ -152,7 +152,9 @@ get_random_index_2d(I, J, N) ->
   end.
 
 get_random_index(N, Index) ->
+  io:fwrite("Entred random index fundion\n"),
   J = rand:uniform(N),
+  io:fwrite("Exiting\n"),
   if Index /= J ->
     J;
     true ->
@@ -163,6 +165,7 @@ get_random_index(N, Index) ->
 
 send_full_network(Pids, S, W, Index) ->
   N = length(Pids),
+  io:fwrite("Value of N is : ~p and Index is ~p \n",[N,Index]),
   Random_Index = get_random_index(N, Index),
   Pid = lists:nth(Random_Index, Pids),
   Pid ! {pushsum, full_network, S, W, Random_Index}.

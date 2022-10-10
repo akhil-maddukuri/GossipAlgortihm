@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="10a0bb3d-c4fe-4f01-9bc5-91120c34fed0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../.idea/DOSP.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/rebar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/gossipAlgo.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/gossipAlgo.erl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/GossipAlgorithm/gossip.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/GossipAlgorithm/gossipAlgo.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/GossipAlgorithm/pushsum.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/GossipAlgorithm/sum.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production/GossipAlgorithm/test.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/GossipAlgorithm/gossip.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/GossipAlgorithm/gossipAlgo.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/GossipAlgorithm/pushsum.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/GossipAlgorithm/sum.beam" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/GossipAlgorithm/test.beam" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gossip.erl" beforeDir="false" afterPath="$PROJECT_DIR$/src/gossip.erl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sum.beam" beforeDir="false" afterPath="$PROJECT_DIR$/src/sum.beam" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sum.erl" beforeDir="false" afterPath="$PROJECT_DIR$/src/sum.erl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,13 +58,48 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="gossipAlgo.start" type="ErlangApplicationRunConfiguration" factoryName="Erlang" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="GossipAlgorithm" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="debugOptions">
+        <ErlangDebugOptions>
+          <option name="autoUpdateModulesNotToInterpret" value="true" />
+          <option name="modulesNotToInterpret">
+            <set />
+          </option>
+        </ErlangDebugOptions>
+      </option>
+      <option name="erlFlags" value="" />
+      <option name="moduleAndFunction" value="gossipAlgo start" />
+      <option name="params" value="10 [] &quot;Full_Network&quot;" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="useTestCodePath" value="false" />
+      <option name="workDirectory" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Erlang Application.gossipAlgo.start" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -64,6 +110,7 @@
       <updated>1665348526414</updated>
       <workItem from="1665348527827" duration="1254000" />
       <workItem from="1665350337776" duration="23252000" />
+      <workItem from="1665430113532" duration="4624000" />
     </task>
     <servers />
   </component>
