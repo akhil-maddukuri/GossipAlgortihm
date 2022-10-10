@@ -1,5 +1,5 @@
 -module(gossip).
--author("srinivaskoushik").
+
 
 -export([process/3,msg_handler/2]).
 

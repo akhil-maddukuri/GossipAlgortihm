@@ -1,6 +1,5 @@
 -module(pushsum).
 
--author("srinivaskoushik").
 
 -export([process/2, msg_handler/4]).
 
@@ -16,6 +15,7 @@ end_spawns(Pids, Index,Cuurent_Pid) ->
             if 
             Pid /= Cuurent_Pid->
                 Pid ! {done};
+                %io:fwrite("procss id ending is ~p \n",[Pid]);
             true->
                 ok
     end,
@@ -41,7 +41,7 @@ process(0, Pids) ->
 % Pid ! {pushsum, grid_network, 0, 0, 1};
 % Pid ! {pushsum, threeD_grid_network, 0, 0, 1};
 process(N, Pids) ->
-    Pid = spawn(pushsum, msg_handler, [-1, [], 1, 1]),
+    Pid = spawn(pushsum, msg_handler, [0, [], 1, 1]),
     process(N - 1, lists:append([Pids, [Pid]])).
 
 msg_handler(3, Pids, _, _) ->
@@ -57,8 +57,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             Previous_Ratio = Current_S / Current_W,
             New_Ratio = New_S / New_W,
             send_full_network(Pids, New_S / 2, New_W / 2, Index),
-            % io:fwrite("The difference in ratio is ~p ~n", [abs(Previous_Ratio - New_Ratio)]),
-            % io:fwrite("The count is ~p ~n", [Count]),
+
             if abs(Previous_Ratio - New_Ratio) =< 0.0000000001 ->
                    msg_handler(Count + 1, Pids, New_S / 2, New_W / 2);
                true ->
@@ -112,6 +111,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             msg_handler(C, Ids, S, W);
 
         {done}->
+          io:fwrite("procss id ending is \n"),
             exit("")
     end.
 
