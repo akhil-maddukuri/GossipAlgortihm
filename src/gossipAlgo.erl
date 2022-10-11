@@ -54,7 +54,7 @@ processHandler(Count,Pids)->
       processHandler(Count+1, Pids);
 
     {grid_network,Index}->
-      %io:fwrite("Receoved gossip tp ~p \n",[self()]),
+      %io:fwrite("Received gossip tp ~p \n",[self()]),
       network_2d(Pids,Index),
       processHandler(Count+1, Pids);
 
