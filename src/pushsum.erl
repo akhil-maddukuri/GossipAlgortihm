@@ -32,11 +32,13 @@ start_spawns(Pids, Index) ->
     end.
 
 process(0, Pids) ->
-    io:fwrite("The Pids are ~p ~n", [Pids]),
+   % io:fwrite("The Pids are ~p ~n", [Pids]),
     start_spawns(Pids, 1),
     Pid = lists:nth(1, Pids),
     io:fwrite("~p ~n",[get_time_stamp()]),
     Pid ! {pushsum, full_network, 0, 0, 1};
+
+
 % Pid ! {pushsum, line_network, 0, 0, 1};
 % Pid ! {pushsum, grid_network, 0, 0, 1};
 % Pid ! {pushsum, threeD_grid_network, 0, 0, 1};
@@ -52,6 +54,7 @@ msg_handler(3, Pids, _, _) ->
 msg_handler(Count, Pids, Current_S, Current_W) ->
     receive
         {pushsum, full_network, S, W, Index} ->
+
             New_S = Current_S + S,
             New_W = Current_W + W,
             Previous_Ratio = Current_S / Current_W,
@@ -70,7 +73,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             Previous_Ratio = Current_S / Current_W,
             New_Ratio = New_S / New_W,
             send_line_network(Pids, New_S / 2, New_W / 2, Index),
-            io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
+           % io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
             % io:fwrite("The count is ~p ~n", [Count]),
             if abs(Previous_Ratio - New_Ratio) =< 0.0000000001 ->
                    msg_handler(Count + 1, Pids, New_S / 2, New_W / 2);
@@ -84,7 +87,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             Previous_Ratio = Current_S / Current_W,
             New_Ratio = New_S / New_W,
             send_2d_network(Pids, New_S / 2, New_W / 2, Index),
-            io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
+            %io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
             % io:fwrite("The count is ~p ~n", [Count]),
             if abs(Previous_Ratio - New_Ratio) =< 0.0000000001 ->
                    msg_handler(Count + 1, Pids, New_S / 2, New_W / 2);
@@ -98,7 +101,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             Previous_Ratio = Current_S / Current_W,
             New_Ratio = New_S / New_W,
             send_3d_network(Pids, New_S / 2, New_W / 2, Index),
-            io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
+            %io:fwrite("The difference in ratio is ~p ~n", [Previous_Ratio - New_Ratio]),
             % io:fwrite("The count is ~p ~n", [Count]),
             if abs(Previous_Ratio - New_Ratio) =< 0.0000000001 ->
                    msg_handler(Count + 1, Pids, New_S / 2, New_W / 2);
@@ -111,7 +114,7 @@ msg_handler(Count, Pids, Current_S, Current_W) ->
             msg_handler(C, Ids, S, W);
 
         {done}->
-          io:fwrite("procss id ending is \n"),
+          %io:fwrite("procss id ending is \n"),
             exit("")
     end.
 
@@ -156,6 +159,7 @@ send_full_network(Pids, S, W, Index) ->
     Pid = lists:nth(Random_Index, Pids),
     Pid ! {pushsum, full_network, S, W, Random_Index}.
 
+
 send_line_network(Pids, S, W, Index) ->
     N = length(Pids),
     if Index == 1 ->
@@ -170,7 +174,7 @@ send_line_network(Pids, S, W, Index) ->
                      rand:uniform(2), A)
     end,
     Pid = lists:nth(Random_Index, Pids),
-    io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
+    %io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
     Pid ! {pushsum, line_network, S, W, Random_Index}.
 
 send_2d_network(Pids, S, W, Index) ->
@@ -184,7 +188,7 @@ send_2d_network(Pids, S, W, Index) ->
         get_1d_index(lists:nth(1, Random_Indices), lists:nth(2, Random_Indices), N) + 1,
     % io:fwrite("~p ~n",[Random_Indices]),
     Pid = lists:nth(Random_Index, Pids),
-    io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
+    %io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
     Pid ! {pushsum, grid_network, S, W, Random_Index}.
 
 send_3d_network(Pids, S, W, Index) ->

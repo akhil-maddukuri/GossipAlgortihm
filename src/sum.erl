@@ -47,17 +47,19 @@ start(0, Pids, Network) ->
   _pid = lists:nth(length(Pids)-1, Pids),
 
   if Network == "Full_Network"  ->
-    _pid ! {pushsum, full_network, 0, 0, 1};
-    Network == "2D_Grid" -> _pid ! {pushsum, twodgrid, 0, 0, 1};
-    Network == "Line" -> _pid ! {pushsum, line, 0, 0, 1};
-    Network == "Imperfect_2D" -> _pid ! {pushsum, impft2d, 0, 0, 1};
+    _pid ! {sum, full_network, 0, 0, 1};
+    Network == "2D_Grid" -> _pid ! {sum, twodgrid, 0, 0, 1};
+    Network == "Line" -> _pid ! {sum, line, 0, 0, 1};
+    Network == "Imperfect_2D" -> _pid ! {sum, impft2d, 0, 0, 1};
     true ->
       throw("invalid topology")
   end;
 
 
 start(N, _pids, Network) ->
-  _pid = spawn(sum, pushsum, [0, [], 1, 1]),
+  {_,_} = statistics(runtime),
+  {_,_} = statistics(wall_clock),
+  _pid = spawn(sum, pushsum, [0, [], N, 1]),
   start(N - 1, lists:append([_pids, [_pid]]), Network).
 
 
@@ -69,7 +71,7 @@ pushsum(3, Pids,_,_) ->
 
 pushsum(Count, Pids,_curr_s,_curr_w)->
   receive
-    {pushsum, full_network, S, W, _index} ->
+    {sum, full_network, S, W, _index} ->
       _updated_s = _curr_s + S,
       _updated_w = _curr_w + W,
       send_full_network(Pids, _updated_s / 2, _updated_w / 2, _index),
@@ -80,7 +82,7 @@ pushsum(Count, Pids,_curr_s,_curr_w)->
           pushsum(0, Pids, _updated_s / 2, _updated_w / 2)
       end;
 
-    {pushsum, twodgrid, S, W, _index} ->
+    {sum, twodgrid, S, W, _index} ->
       _updated_s = _curr_s + S,
       _updated_w = _curr_w + W,
       send_2d_network(Pids, _updated_s / 2, _updated_w / 2, _index),
@@ -93,7 +95,7 @@ pushsum(Count, Pids,_curr_s,_curr_w)->
 
 
 
-    {pushsum, line, S, W, _index} ->
+    {sum, line, S, W, _index} ->
       _updated_s = _curr_s + S,
       _updated_w = _curr_w + W,
       send_line_network(Pids, _updated_s / 2, _updated_w / 2, _index),
@@ -105,7 +107,7 @@ pushsum(Count, Pids,_curr_s,_curr_w)->
       end;
 
 
-    {pushsum, impft2d, S, W, _index} ->
+    {sum, impft2d, S, W, _index} ->
       _updated_s = _curr_s + S,
       _updated_w = _curr_w + W,
       send_3d_network(Pids, _updated_s / 2, _updated_w / 2, _index),
@@ -154,7 +156,7 @@ get_random_index_2d(I, J, N) ->
 get_random_index(N, Index) ->
   J = rand:uniform(N),
   if Index /= J ->
-    J;
+      J;
     true ->
       get_random_index(N, Index)
   end.
@@ -165,7 +167,7 @@ send_full_network(Pids, S, W, Index) ->
   N = length(Pids),
   Random_Index = get_random_index(N, Index),
   Pid = lists:nth(Random_Index, Pids),
-  Pid ! {pushsum, full_network, S, W, Random_Index}.
+  Pid ! {sum, full_network, S, W, Random_Index}.
 
 send_line_network(Pids, S, W, Index) ->
   N = length(Pids),
@@ -182,7 +184,7 @@ send_line_network(Pids, S, W, Index) ->
   end,
   Pid = lists:nth(Random_Index, Pids),
   io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
-  Pid ! {pushsum, line_network, S, W, Random_Index}.
+  Pid ! {sum, line_network, S, W, Random_Index}.
 
 send_2d_network(Pids, S, W, Index) ->
   N = round(math:sqrt(length(Pids))),
@@ -196,7 +198,7 @@ send_2d_network(Pids, S, W, Index) ->
   % io:fwrite("~p ~n",[Random_Indices]),
   Pid = lists:nth(Random_Index, Pids),
   io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
-  Pid ! {pushsum, grid_network, S, W, Random_Index}.
+  Pid ! {sum, grid_network, S, W, Random_Index}.
 
 send_3d_network(Pids, S, W, Index) ->
   N = round(math:sqrt(length(Pids))),
@@ -211,8 +213,8 @@ send_3d_network(Pids, S, W, Index) ->
   Random_Pid = lists:nth(Random_Index, Pids),
   Pid = lists:nth(Grid_Random_Index, Pids),
   % io:fwrite("Sending gossip from ~p to ~p ~n", [self(), Pid]),
-  Pid ! {pushsum, threeD_grid_network, S, W, Grid_Random_Index},
-  Random_Pid ! {pushsum, threeD_grid_network, S, W, Random_Index}.
+  Pid ! {sum, threeD_grid_network, S, W, Grid_Random_Index},
+  Random_Pid ! {sum, threeD_grid_network, S, W, Random_Index}.
 
 
 
