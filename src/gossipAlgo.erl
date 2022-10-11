@@ -74,9 +74,9 @@ processHandler(Count,Pids)->
 get_rand(N,Index)->
   Rand = rand:uniform(N),
   if
-    Index /= Rand-> Rand;
+    Index == Rand-> get_rand(N,Index);
     true->
-      get_rand(N, Index)
+      Rand
   end.
 
 rand_2d(I,J,N)->
@@ -91,7 +91,6 @@ rand_2d(I,J,N)->
     true->
       rand_2d(I, J, N)
   end.
-
 
 full_network(Pids,_Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
