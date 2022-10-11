@@ -79,17 +79,17 @@ get_rand(N,Index)->
       get_rand(N, Index)
   end.
 
-rand_2d_idx(I,J,N)->
+rand_2d(I,J,N)->
   A = [1,0,-1],
   _RIndex1 = I + lists:nth(rand:uniform(3), A),
   _RIndex2 = J + lists:nth(rand:uniform(3), A),
   if
     _RIndex1 == I andalso _RIndex2 == J->
-      rand_2d_idx(I, J, N);
+      rand_2d(I, J, N);
     _RIndex1 >= 0 andalso _RIndex1 < N andalso _RIndex2 >= 0 andalso _RIndex2 < N ->
       [_RIndex1,_RIndex2];
     true->
-      rand_2d_idx(I, J, N)
+      rand_2d(I, J, N)
   end.
 
 
@@ -125,7 +125,7 @@ network_2d(Pids,_Index)->
   Indices = [round(_Index/4), _Index rem 4],
   _i = lists:nth(1, Indices),
   _j = lists:nth(2, Indices),
-  _RNodes = rand_2d_idx(_i,_j,N),
+  _RNodes = rand_2d(_i,_j,N),
   _RIndex  = round(lists:nth(1, _RNodes)*N + lists:nth(2, _RNodes))+1,
   Pid = lists:nth(_RIndex, Pids),
   Pid ! {grid_network,_RIndex}.
@@ -136,9 +136,10 @@ network_3d(Pids,Index)->
   _Nodes = [round(Index/4), Index rem 4],
   _I = lists:nth(1, _Nodes),
   _J = lists:nth(2, _Nodes),
-  _Rnodes = rand_2d_idx(_I,_J,N),
+  _Rnodes = rand_2d(_I,_J,N),
   _GRidx = round(lists:nth(1, _Rnodes)*N + lists:nth(2, _Rnodes)),
   _RIndx = get_rand(length(Pids), Index),
+%%  io:fwrite("randoms: ~p, ~p",[_GRidx,_RIndx]),
   Random_Pid = lists:nth(_RIndx, Pids),
   Pid = lists:nth(_GRidx, Pids),
   Pid ! {threeD_grid_network,_GRidx},
