@@ -33,9 +33,9 @@ process(0,Pids,Gossip)->
     start_spawns(Pids, 1, length(Pids)),
     io:fwrite("~p ~n",[get_time_stamp()]),
     % send_full_network(Pids,Gossip,1);
-    send_line_network(Pids,Gossip,1);
-    % send_2d_network(Pids, Gossip, 1);
-    % send_3d_network(Pids, Gossip, 1);
+    %send_line_network(Pids,Gossip,1);
+    send_2d_network(Pids, Gossip, 1);
+    %send_3d_network(Pids, Gossip, 1);
 
 process(N,Pids,Gossip)->
     Pid = spawn(gossip,msg_handler,[0,[]]),

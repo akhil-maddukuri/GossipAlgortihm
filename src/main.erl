@@ -13,7 +13,13 @@
 -export([start/3]).
 
 start(N,Method,Network)->
+%%  io:fwrite("Mega Sec is: ~p, Sec is: ~p, MicroSec is: ~p\n",[1665, 457264, 107491]),
+%%  io:fwrite("ok\n"),
+%%  io:fwrite("Node Converged\n"),
+%%  io:fwrite("Mega Sec is: ~p, Sec is: ~p, MicroSec is: ~p\n",[1665, 457266, 934491]).
+
   case Method of
-    "gossip" -> gossipAlgo:start(N,[],Network)
+    "gossip" -> gossipAlgo:start(N,[],Network);
+    "pushsum"-> pushsumalgo:start(N,[],Network)
   end.
 

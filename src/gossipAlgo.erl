@@ -9,12 +9,7 @@
 
 -module(gossipAlgo).
 
--export([start/3,processHandler/2]).
-
-get_time()->
-  {MegaSecs, Sec, MicroSecs} = os:timestamp(),
-  %io:fwrite("Mega Sec is: ~p, Sec is: ~p, MicroSec is: ~p\n",[MegaSecs, Sec, MicroSecs]),
-  (MegaSecs*1000000 + Sec)*1000 + (MicroSecs/1000).
+-export([start/3,processHandler/2,createActors/3,full_network/2,line_network/2,network_2d/2,network_3d/2]).
 
 createActors(Pids,I,N)->
   if
@@ -22,6 +17,7 @@ createActors(Pids,I,N)->
       done;
     true->
       Pid = lists:nth(I, Pids),
+      %io:fwrite("Actor created: ~p",[Pid}),
       Pid ! {start,Pids},
       createActors(Pids, I+1, N)
   end.
@@ -75,83 +71,79 @@ processHandler(Count,Pids)->
       erlang:exit("exiting")
   end.
 
+get_rand(N,Index)->
+  Rand = rand:uniform(N),
+  if
+    Index /= Rand-> Rand;
+    true->
+      get_rand(N, Index)
+  end.
 
 rand_2d_idx(I,J,N)->
   A = [1,0,-1],
-  Random_Index_1 = I + lists:nth(rand:uniform(3), A),
-  Random_Index_2 = J + lists:nth(rand:uniform(3), A),
+  _RIndex1 = I + lists:nth(rand:uniform(3), A),
+  _RIndex2 = J + lists:nth(rand:uniform(3), A),
   if
-    Random_Index_1 == I andalso Random_Index_2 == J->
+    _RIndex1 == I andalso _RIndex2 == J->
       rand_2d_idx(I, J, N);
-    Random_Index_1 >= 0 andalso Random_Index_1 < N andalso Random_Index_2 >= 0 andalso Random_Index_2 < N ->
-      [Random_Index_1,Random_Index_2];
+    _RIndex1 >= 0 andalso _RIndex1 < N andalso _RIndex2 >= 0 andalso _RIndex2 < N ->
+      [_RIndex1,_RIndex2];
     true->
       rand_2d_idx(I, J, N)
   end.
 
-get_random_index(N,Index)->
-  J = rand:uniform(N),
-  if
-    Index /= J->
-      J;
-    true->
-      get_random_index(N, Index)
-  end.
+
 full_network(Pids,_Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
   N = length(Pids),
-  _RIndex =  get_random_index(N, _Index),
+  _RIndex =  get_rand(N, _Index),
   Pid = lists:nth(_RIndex, Pids),
   Pid ! {full_network,_RIndex},
   ok.
 
 line_network(Pids,Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
-  N = length(Pids),
+  _Length = length(Pids),
   if
     Index == 1->
-      Random_Index = Index+1;
-    Index == N->
-      Random_Index = Index - 1;
+      _RIndx = Index+1;
+    Index == _Length->
+      _RIndx = Index - 1;
     true->
       A = [-1,1],
-      Random_Index = Index + lists:nth(rand:uniform(2), A)
+      _RIndx = Index + lists:nth(rand:uniform(2), A)
   end,
-  Pid = lists:nth(Random_Index, Pids),
+  Pid = lists:nth(_RIndx, Pids),
   % io:fwrite("Sending gossip from ~p to ~p ~n",[self(),Pid]),
-  Pid ! {line_network,Random_Index},
+  Pid ! {line_network,_RIndx},
   ok.
 
 network_2d(Pids,_Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
-
+  %io:fwrite("In 2d network\n"),
   N = round(math:sqrt(length(Pids))),
   Indices = [round(_Index/4), _Index rem 4],
   _i = lists:nth(1, Indices),
   _j = lists:nth(2, Indices),
   _RNodes = rand_2d_idx(_i,_j,N),
-  _RIndex  = round(lists:nth(1, _RNodes)*N + lists:nth(2, _RNodes)),
+  _RIndex  = round(lists:nth(1, _RNodes)*N + lists:nth(2, _RNodes))+1,
   Pid = lists:nth(_RIndex, Pids),
-  % io:fwrite("Sending gossip from ~p to ~p ~n",[self(),Pid]),
-  Pid ! {grid_network,_RIndex},
-  ok.
+  Pid ! {grid_network,_RIndex}.
 
 network_3d(Pids,Index)->
   %io:fwrite("sending gossip from ~p \n",[self()]),
   N = round(math:sqrt(length(Pids))),
-  Indices = [round(Index/4), Index rem 4],
-  %Indices = get_2d_index(Index, 4),
-  I = lists:nth(1, Indices),
-  J = lists:nth(2, Indices),
-  Random_Indices = rand_2d_idx(I,J,N),
-  _GRidx = round(lists:nth(1, Random_Indices)*N + lists:nth(2, Random_Indices)),
-  %io:fwrite("random grid index: ~p",[_GRidx]),
-  Random_Index = get_random_index(length(Pids), Index),
-  Random_Pid = lists:nth(Random_Index, Pids),
+  _Nodes = [round(Index/4), Index rem 4],
+  _I = lists:nth(1, _Nodes),
+  _J = lists:nth(2, _Nodes),
+  _Rnodes = rand_2d_idx(_I,_J,N),
+  _GRidx = round(lists:nth(1, _Rnodes)*N + lists:nth(2, _Rnodes)),
+  _RIndx = get_rand(length(Pids), Index),
+  Random_Pid = lists:nth(_RIndx, Pids),
   Pid = lists:nth(_GRidx, Pids),
   Pid ! {threeD_grid_network,_GRidx},
-  Random_Pid !{threeD_grid_network,Random_Index},
-  ok.
+  Random_Pid !{threeD_grid_network,_RIndx},
+  done.
 
 stopActors(Pids, Idx,Cur) ->
   if Idx > length(Pids) ->
@@ -166,3 +158,8 @@ stopActors(Pids, Idx,Cur) ->
       end,
       stopActors(Pids, Idx + 1,Cur)
   end.
+
+get_time()->
+  {MegaSecs, Sec, MicroSecs} = os:timestamp(),
+  io:fwrite("Mega Sec is: ~p, Sec is: ~p, MicroSec is: ~p\n",[MegaSecs, Sec, MicroSecs]),
+  (MegaSecs*1000000 + Sec)*1000 + (MicroSecs/1000).
