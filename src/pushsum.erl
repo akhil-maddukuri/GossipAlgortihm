@@ -36,10 +36,10 @@ process(0, Pids) ->
     start_spawns(Pids, 1),
     Pid = lists:nth(1, Pids),
     io:fwrite("~p ~n",[get_time_stamp()]),
-    Pid ! {pushsum, full_network, 0, 0, 1};
+   % Pid ! {pushsum, full_network, 0, 0, 1};
 
 
-% Pid ! {pushsum, line_network, 0, 0, 1};
+   Pid ! {pushsum, line_network, 0, 0, 1};
 % Pid ! {pushsum, grid_network, 0, 0, 1};
 % Pid ! {pushsum, threeD_grid_network, 0, 0, 1};
 process(N, Pids) ->
