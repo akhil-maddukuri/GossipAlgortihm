@@ -1,5 +1,5 @@
 %%%-------------------------------------------------------------------
-%%% @author dhanush
+%%% @author dhanush, akhil
 %%% @copyright (C) 2022, <COMPANY>
 %%% @doc
 %%%
@@ -7,7 +7,7 @@
 %%% Created : 10. Oct 2022 6:49 PM
 %%%-------------------------------------------------------------------
 -module(main).
--author("dhanush").
+-author("dhanush, akhil").
 
 %% API
 -export([start/3]).
